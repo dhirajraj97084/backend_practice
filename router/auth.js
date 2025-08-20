@@ -6,14 +6,15 @@ const router= express.Router();
 router.get("/",(req,res)=>{
     res.json({message:"Welcome to Home Auth Api"});
 })
+
+// create a user
 router.post("/login",async(req,res)=>{
     const {name ,email,password}=req.body;
     try {
         if(!name || !email || !password){
            res.status(400).json({error:"please fill the all the fields"});
         }
-        const user=await User.findOne({email});
-         
+
         const newUser=await User({
             name,
             email,
@@ -25,8 +26,23 @@ router.post("/login",async(req,res)=>{
        res.status(500).json({error:"Internal server Error"});
     }
 })
-router.get("/register",(req,res)=>{
-    res.json({message:"Welcome to Register Auth Api"});
+// find all users
+router.get("/users",async(req,res)=>{
+    try {
+       const user= await User.find();
+       res.status(200).json({users:user});
+        } catch (error) {
+        res.status(500).json({error:error.message});
+    }
+})
+//delete all user
+router.delete("/:id",async(req,res)=>{
+    try {
+      await User.findByIdAndDelete(req.params.id);
+      res.status(200).json({message:"User Deleted Successfully"});  
+    } catch (error) {
+        res.status(500).json({error:error.message});
+    }
 })
 
 export default router;

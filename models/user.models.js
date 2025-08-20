@@ -15,6 +15,6 @@ const userSchema=new Schema({
         required:true,
         minlength:6
     }
-},{timeseries:true});
+},{timestamps:true});
 
 export const User=mongoose.model("User",userSchema);
